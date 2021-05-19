@@ -1,0 +1,34 @@
+/bin :
+binary program (file) required during booting, repairing,files required to run into single-user-mode, and other important basic commands viz., cat, du, df, tar, rpm, wc, history,etc.
+
+/boot :
+holds important files during boot-up process, including linux kernel
+
+/dev : 
+containts device files for all the harfware devices on the macine,e.g, cdrom,cpu,etc
+
+/etc : 
+containts aplications configuration files, startup, shutdown, start, stop script for every individual program
+
+/home : 
+home directory of the users.
+
+/lib:
+library kernel modules and shared library images
+
+/lost+found :
+recicle bin like for recovering files
+
+/media :
+removable device
+
+/mnt :
+temporary mount directory for mounting file system
+
+/opt :
+optional is abbreviated as opt. contains third party application software. Viz., java, etc
+
+/proc :
+a virtual and pseudo file-system which containts information about running proccess with a particular process id aka pid
+
+/ root : home directory of root user should never be confused with '/'

@@ -1,0 +1,67 @@
+whoami 		: user siapa
+pwd 		: lokasi path
+ls 		: liat list folder
+ls -l
+ll
+cd 		: change direktory
+cd ~ 		: change directory ke home
+clear 		: hapus command history
+
+mkdir 		: create folder
+man ls 		: melihat manual sintax
+ls -la 		: melihat hidden file
+
+shutdown -h now	: matiin server
+
+
+su - 					: masuk root
+uname -a 				: lihat kernel version
+cat /etc/redhat-release			: liat versi OS
+grep memTotal /proc/meminfo		: lihat memory
+free -h
+cat /proc/cpuinfo| grep processor 	: lihat prosesor
+df -kh					: lihat keseluruhan folder terpakai
+id sysadmin 				: cek di mana aja masuk grup nya
+
+add group linux command			: groupadd dba
+					  groupadd operator
+
+melihat list group 			: cat /etc/group
+
+
+melihat user 				: cut –d: –f1 /etc/passwd
+					 cat /etc/passwd
+
+cari existing linux user 		: getent passwd | grep username
+
+bikin user 				: useraadd oracle -g dba
+					  useradd mayuvi -g dba
+
+					useradd operator01 -g operator
+					useradd operator02 -g operator
+
+change password 			:
+					passwd oracle
+					passwd mayuvi
+					passwd operator01
+
+tambahkan group pada user 		:
+					usermod -a -G dba,sysadmin mayuvi
+
+tail -f /var/log/apache2/access.log = cek proses server
+query cache mysql :
+((Qcache_hits / (Qcache_hits + Qcache_inserts + Qcache_not_cached))*100)
+
+delete user 	: userdel -r username
+
+kirim file & folder : scp linux
+
+liat list crontab : crontab -l
+
+bikin crontab : crontab -e
+
+
+
+
+
+
