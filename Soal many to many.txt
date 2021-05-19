@@ -1,0 +1,59 @@
+1. tampilkan produk yang terjual berdasarkan order date
+
+SELECT productName,orderNumber,orderDate
+FROM products JOIN orderDetails USING (productCode)
+JOIN orders USING (orderNumber)
+ORDER BY orderDate; 
+
+2. tampilkan semua order atas produk 1940 ford pickup truck
+
+SELECT productName,orderNumber,orderDate
+FROM products JOIN orderDetails USING (productCode)
+JOIN orders USING (orderNumber)
+WHERE productName = '1940 ford pickup truck';
+
+3. tampilkan nama customer dan order number dimana ordernya memiliki nilai lebih dari 25000
+
+SELECT customerName,orderNumber,orderDate,
+SUM(quantityOrdered*priceEach) as nilai
+FROM customers JOIN orders USING(customerNumber)
+JOIN orderDetails USING(orderNumber)
+GROUP BY customerNumber
+HAVING nilai > 25000;
+
+4. Apakah ada produk yang terdapat di setiap ordernya?
+
+SELECT productCode,COUNT(*) AS banyak
+FROM orderdetails
+GROUP BY productCode
+HAVING banyak = (
+SELECT COUNT(*) FROM orders
+);
+
+
+5. tampilkan order yang memiliki harga jual kurang dari MSRP nya
+
+SELECT orderNumber,productName,priceEach,MSRP
+FROM products JOIN orderDetails USING (productCode)
+JOIN orders USING (orderNumber)
+WHERE priceEach < msrp
+ 
+
+6. laporkan produk yang terjual dengan keuntungan dua kali lipat
+
+SELECT productName,priceEach-buyPrice AS keuntungan, buyPrice
+FROM products JOIN orderDetails USING (productCode)
+WHERE priceEach-buyprice > buyprice
+
+7. tampilkan produk yang terjual pada hari senin
+
+SELECT DAYNAME(orderDSate),productName
+FROM products JOIN orderDetails USING (productCode)
+JOIN orders USING (orderNumber)
+WHERE DAYOFWEEK(orderDate) = 2
+
+8. Berapa jumlah produk yang masih berstatus 'on hold'
+
+SELECT SUM(quantityOrdered) AS jumlah
+FROM orders JOIN orderdetails USING (orderNumber)
+WHERE status = 'on hold';

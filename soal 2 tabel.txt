@@ -1,0 +1,82 @@
+1. tampilkan sales representatif dari setiap customer
+
+SELECT customerName,salesRepEmployeeNumber,concat(firstName," ",lastName) AS employee Name
+FROM customers JOIN employees
+ON salesRepEmployeeNumber = employeeNumber ;
+
+2. tampilkan total pembayaran dari atelier graphique
+
+SELECT customerNumber,customerName,SUM(amount)
+FROM customers JOIN payments
+USING (customerNumber)
+WHERE customerName LIKE "%atelier%" ;
+
+
+3. tampilkan total pembayaran pertanggal
+
+SELECT paymentDate, SUM(amount) AS total
+FROM payments
+GROUP BY paymentDate
+
+4. tampilkan product yang belum pernah terjual
+
+SELECT productCode,productName FROM products
+WHERE productCode NOT IN (SELECT productCode FROM orderDetails);
+
+SELECT productCode,productName,orderNumber FROM products
+LEFT JOIN orderDetails USING (productCode) 
+WHERE orderNumber IS NULL;
+
+5. tampilkan jumlah yang terbayar per tiap customer
+select customerNumber,customerName,sum(amount) 
+from customers join payments
+using (customerNumber)
+group by customerNumber;
+
+6. berapa order yang sudah pernah dibuat oleh herkku gifts
+select customerNumber,customerName,orderNumber //
+select count(*) as jumlah_order
+from customers join orders
+using (customerNumber)
+where customerName like '%herkku%';
+
+7. tampilkan karyawann di boston
+select employeeNumber,concat(firstname," ",lastname),city
+from employees join offies
+using (officeCode)
+where city = 'boston';
+
+
+8. tampilkan pembayaran atas customer yang lebih dari 100000, urutkan dari pembayaran tertinggi
+SELECT customerName,customerNumber,amount
+FROM customers JOIN payments
+USING (customerNumber)
+WHERE amount > 100000
+ORDER BY pembayaran DESC;
+
+
+9. tampilkan nilai dari order yang statusnya 'on hold'
+SELECT orderNumber,SUM(quantityOrdered*priceEach) as nilai
+FROM orders
+JOIN orderDetails
+USING(orderNumber)
+WHERE status = 'on hold'
+GROUP BY orderNumber;
+
+
+
+10. tampilkan jumlah order 'on hold' untuk tiap customer
+
+SELECT customerName,COUNT(*) AS statusOnHold
+FROM customers JOIN orders USING (customerNumber)
+WHERE status = 'on hold'
+GROUP BY customerNumber ;
+
+
+
+
+
+
+
+
+

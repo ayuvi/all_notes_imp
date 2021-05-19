@@ -1,0 +1,217 @@
+syntax query
+
+akses sql lewar cmd
+cd>mysql>bin
+mysql -u root
+
+menampilkan database
+- SHOW DATABASES;
+
+membuat database
+- CREATE DATABASE toko
+- CREATE DATABASE IF NOT EXISTS toko
+
+hapus database
+- DROP DATABASE toko
+
+pilih database
+-USE toko
+
+tampilkan semua table
+-SHOW TABLES;
+
+membuat table
+- CREATE TABLE satuan (
+satuanId INT NOT NULL AUTO_INCREMENT,
+satuanNama VARCHAR(30) NOT NULL,
+PRIMARY KEY (satuanId)
+);
+
+melihat isi table
+- DESCRIBE satuan
+
+membuat table dengan foreign key
+- CREATE TABLE `barang` (
+	`barangId` INT ( 11 ) NOT NULL,
+	`supplierId` INT ( 11 ) NOT NULL,
+	`satuanId` INT ( 11 ) NOT NULL,
+	PRIMARY KEY ( `barangId` ),
+	INDEX `supplierId` ( `supplierId` ),
+	INDEX `satuanId` ( `satuanId` ),
+	CONSTRAINT `supplier_fk` FOREIGN KEY ( `supplierId` ) REFERENCES `supplier` ( `supplierId` ) ON UPDATE CASCADE,
+CONSTRAINT `satuan_fk` FOREIGN KEY ( `satuanId` ) REFERENCES `satuan` ( `satuanId` ) 
+) COLLATE = 'latin1_swedish_ci' ENGINE = INNODB;
+
+hapus table
+- DROP TABLE barang
+
+merubah table
+- ALTER TABLE barang ADD COLUMN deskripsi TEXT;
+- ALTER TABLE barang DROP COLUMN deskrips;
+- ALTER TABLE barang ADD COLUMN deskripsi TEXT AFTER barangNama;
+
+select table
+- SELECT * FROM satuan
+
+INSERT ke table (semua field)
+- INSERT INTO satuan VALUES (NULL,"pcs");
+
+INSERT BANYAK FIELD
+- INSERT INTO personal (personal_name,phone,alamat) VALUES ('asep','66446','jakbar'),('asep','66446','jakbar')
+
+insert ke satu field
+- INSERT INTO satuan (satuanNama) VALUES ('KG');
+
+insert beberapa query
+- INSERT INTO satuan (satuanNama) VALUES ('liter','buah');
+
+update 
+UPDATE barang SET harga_beli = 4500 WHERE barang_id = 1
+
+delete
+DELETE FROM barang WHERE barang_id = 1
+
+select 
+SELECT * FROM product;
+SELECT productCode, productName FROM product LIMIT 10,10
+
+where
+select 4 kolom dan where line = motorcycles & bukan sama dgn motorcycles & where harga < 50 Or product line plane
+in (plane,ships)
+buyprice between
+
+SELECT productCode, productName, productLine, buyprice 
+FROM products
+WHERE productLine != 'motorcycles' OR buyprice > 50
+WHERE productLine IN ('plane','ships')
+WHERE buyprice BETWEEN 50-70;
+
+like
+select employees yang huruf depan nya f
+SELECT firstname FROM employees WHERE firstName LIKE 'f%'
+select employes yang huruf akhirnya a
+SELECT firstname FROM employees WHERE firstname LIKE '%f'
+ 
+order by
+SELECT productLine,productName, msrp - buyprice AS untung
+FORM products
+ORDER BY untung DESD 
+ 
+order by field(kolom,'urutan isi kolom')
+
+inner join = hanya menampilkan data yang beririsan dengan table lain nya 
+join employee dengan office untuk mencar letak daerah si employees : 
+SELECT firstname,lastName,city FROM employees INNER JOIN offices USING (officeCode)
+
+join employee dengan cust dengan salesRepEmployeeNumber :
+SELECT CONCAT(firstname," ",lastname),customerName
+FROM employees INNER JOIN customer
+ON employees.employeeNUmber = customer.salesRepEmployeeNUmber
+
+left join = menampilkan seluruh data yang beririsan ataupun tidak
+ambil data customer yang pernah order dan tidak pernah order sama sekali
+SELECT customerName,orderNumber FROM customer LEFT JOIN orders
+USING (customerNumber) 
+WHERE orderNumber IS NULL
+
+self join
+ambil data employee beserta nama atasan nya
+SELECT a.firstName,a.jobTitle,b.firstName,b.jobTitle
+FROM employees AS a INNER JOIN employees AS b
+ON a.employeeNumber = b.reportsTo;
+
+FUNGSI AGREGASI
+- COUNT (menghitung cacah data) cth : hitung banyak karyawan yang berasal dari boston :
+SELECT COUNT(*) AS Jumlah 
+FROM employees JOIN offices
+USING (officeCOde)
+WHERE city='boston';
+
+- COUNT(GROUP BY)
+hitung banyak karyawan di setiap kota
+SELECT city,COUNT(*) AS banyak_karyawan FROM offices JOIN employees
+USING (officeCode)
+GROUP BY city;
+
+- SUM (jumlah data) cth : hitung jumlah pemasukan pada tahun 2013 :
+SELECT SUM(amount) AS jumlahpembayaran FROM payments
+WHERE YEAR(paymentDate) = 2003
+
+- SUM(GROUP BY) : hitung jumlah pemasukan tiap tahun
+SELECT YEAR(paymentDate),SUM(amount) 
+FROM payments GROUP BY YEAR(paymentDate);
+
+- AVG (rata rata nilai) cth: hitung rata" kendaraan motorcycles
+SELECT AVG(buyprice) AS rata_harga_motor
+FROM products 
+WHERE productLine = 'motorcycles';
+
+- AVG(GROUP BY) : hitung rata rata harga beli tiap product;
+SELECT productLine,AVG(buyPrice)
+FROM products
+GROUP BY productLine
+
+- MIN (minimum nilai) cth: harga produk paling murah
+note : cara membersihkan temporary & cache
+membuat cronjob
+
+SELECT MIN(msrp) FROM products;
+
+- MIN (GROUP BY) harga jual paling murah tiap product nya
+SELECT productLine,MIN(msrp)
+FROM products
+GROUP BY productLine
+
+- MAX (max nilai) cth:harga produk paling mahal
+SELECT MAX(msrp) FROM products;
+
+- MAX (GROUP BY) hitung pembayaran terbesar tiap tahun
+SELECT YEAR(paymentDate),MAX(amount)
+FROM payments
+GROUP BY YEAR(paymentdate);
+
+
+- HAVING
+hitung jumlah pemasukan perbulan pada tahun 2003 yang nilai nya kurang dari 150000
+SELECT MONTH(paymentDate) AS Bulan,SUM(amount) as total
+FROM payments
+WHERE YEAR(paymentDate) = 2003
+GROUP BY MONTH(paymentDate)
+HAVING total < 150000
+
+
+- SUBQUERY
+siapa karyawan yang melapor ke murphy diane
+SELECT firstName,lastName FROM employees
+WHERE reportsTo IN ( SELECT employeeNumber FROM employees
+WHERE firstName = 'diane');
+
+tampilkan nama product classic cars yang harga belinya di atas rata rata
+SELECT productName,buyprice
+FROM products
+WHERE productLine = 'classic cars' AND buyprice >
+(SELECT AVG(buyprice) FROM products WHERE productLine = 'classic cars');
+
+- SUBQUERY FORM
+tampilkan rata rata penjualan perbulan tertinggi dan terendah dari tahun 2003
+
+SELECT AVG(terendah) AS rata_terendah,
+AVG(tertinggi) AS rata_tertinggi
+fROM
+(SELECT MONTH(paymentDate) AS bulan,
+MIN(AMOUNT) AS terendah,
+MAX(AMOUNT) AS tertinggi
+FROM payments
+WHERE YEAR(paymentDate)=2003
+GROUP BY MONTH(paymentDate)) AS tabel_baru;
+
+- VIEW 
+CREATE VIEW top10Produck AS 
+SELECT productName, SUM(quantityOrdered) as jumlah
+FROM products JOIN orderDetails USING (productCode)
+GROUP BY productCode
+ORDER BY jumlah DESC
+LIMIT 10;
+
+
+

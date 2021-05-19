@@ -1,0 +1,7 @@
+git init : buat baru
+git add . : masukin semua folder
+git status : lihat perubahan
+git checkout : batalin
+git add . : siapin data yang mau di tambah
+git commit : untuk memberikan koment
+git push origin master: untuk upload

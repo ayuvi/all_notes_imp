@@ -1,0 +1,54 @@
+1. tampilkan daftar office di urutkan berdasarkan country,state,city :
+SELECT officeCode,country,state,city
+FROM offices
+ORDER BY country,state,city;
+
+2. ada berapa orang karyawan di perusahaan?
+SELECT COUNT(*) as banyak_karyawan FROM employees;
+
+3. berapa total pembayaran yang telah di terima
+SELECT format(SUM(amount),2) as total FROM payments;
+
+4. tampilkan productline yang mengandung kata car
+SELECT productLine FROM products WHERE productLine = '%cars%'
+
+5. laporakan total pembayaran pada 28 oktober 2004
+SELECT FORMAT(SUM(amount),0) as total FROM payments WHERE paymentDate = '2004-10-28';
+
+6. laporakan pembayaran yang lebih dari 100.000 pada tanggal tersebut
+SELECT * FROM payments WHERE paymentDate = '2004-10-28' AND amount > 100000;
+
+7. tampilkan produk untuk setiap productline
+SELECT productLine, GROUP_CONCAT(productName) FROM products 
+GROUP BY productLine;
+
+8. ada berapa produk di setiap productline
+select productLine,count(*) as banyak_produk form products group by productLine
+
+9. berapa pembayaran minimum yang di terima
+SELECT MIN(amount) from payments;
+
+10. tampilkan pembayaran yang lebih besar dari dua kali rata rata pembayaran
+select * from payments where amount > 
+(select avg(amount)*2 as rata_rata from payments)
+
+11. berapa rata rata keuntungan pada produk (msrp-buyprice)
+select avg(msrp-buyprice) as rata_keuntungan
+from products
+
+12. berapa banyak produk unik (tanpa duplikat) yang di jual classic models
+select distinct productLine from products;
+
+13. tampilkan nama dan kota customer yang tidak memiliki sales representative
+select customerName,city,salesRepEmployeeNumber from customers
+where salesRepEmployeeNumber IS NULL 
+
+14. tampilkan nama beserta jabatan dari employee dengan title vp atau manager
+select concat(firstname," ",lastname),jobTitle from employees where jobTitle like "%VP%" or jobTitle like "%manager%"
+
+
+15. order mana yang bernilai lebih dari 5000
+select orderNumber,sum(priceEach*quantityOrdered) as total_order
+from orderdetails
+group by orderNumber
+having total_order > 5000
